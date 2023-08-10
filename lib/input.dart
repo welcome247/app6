@@ -1,347 +1,504 @@
- 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
- 
-
 import 'model.dart';
 
-//beam
-class InputB extends StatefulWidget {
+class UserInput extends StatefulWidget {
 
-  modelB beam;
+   final ModelBeam beam; 
 
-  //constructer 
-  InputB({required this.beam}) {}
+//construter
+  UserInput({required this.beam, Key? key}) : super(key: key);
  
   @override
-  InputBState createState() => InputBState();
+  UserInputState createState() => UserInputState();
 }
 
-class InputBState extends State<InputB> {
+List<String> Inputs = [
+  'B0',
+  'W1',
+  'W2',
+  'W3',
+  'P1',
+  'P2',
+  'P3',
+  'P4',
+  'P5',
+  'P6',
+  'P7',
+  'P8'
+];
 
-  //double beam = 0.0;
+class UserInputState extends State<UserInput> {
+  TextEditingController _controllerA =
+      TextEditingController(text: '0.0'); //b value textbox
+  TextEditingController _controllerB =
+      TextEditingController(text: '0.0'); //a value textbox
 
-    @override
+  String _labelA = '';
+  String _labelB = '';
+  int _currentIndex = -1;
+  String _currentTitle = 'ความยาวคาน';
+  String _currentTopic = 'B';
+  bool _endOfInput = false;
+  double _beamWidth=0;    
+  String? _errorText = null;
+  double _minA = 0.1;//expect value for box a
+  double _maxA = 12;//expect value for box a
+
+@override
   void initState() {
-    super.initState();
-    //beam = widget.beam; // Initialize beam with the initial value of widget.beam
+    reset();
   }
 
-  final Map<String, dynamic> Properties = {
-    'label': 'ความยาวคาน',
-  };
-  
-  
-  
-  //constructer
-  InputBState() {}
-
-  void incrementvalueA() {
+  void reset() {
     setState(() {
-     (widget.beam.beam  += 0.1).clamp(0.0, 99);
+      _labelA = '';
+      _labelB = '';
+      _currentIndex = 0;
+      _currentTitle = 'ความยาวคาน';
+      _currentTopic = 'B';
+      _endOfInput = false;
+      _beamWidth = 5; // default
+      _errorText = null;
+      _minA = 0.1;
+      _maxA = 12;
+      _controllerA.text = _beamWidth.toStringAsFixed(1);
     });
   }
 
-  void decrementvalueA() {
-    setState(() {
-     (widget.beam.beam   -= 0.1).clamp(0.0, 99);
-    });
+  @override
+  void dispose() {
+    _controllerA.dispose();
+    _controllerB.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
-      // color: Colors.blue, // Replace with your widget here
-      child: Center(
-        child: Column(
-          children: [
-            //b---------------------------------------------------
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: Center(
+            child: Column(children: [ 
+//--------------------------------------------------------------------------------------    
+//#region  Display
 
+          //beam---------------------------------------------------
+          SizedBox(height: 20),
+          if (widget.beam.beam != 0)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(Properties['label'],
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                            'ความยาวคาน',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
+                    ),
+                    const Expanded(
+                      child: Column(),
                     ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () => decrementvalueA(),
-                              ),
-                              Container(
-                                  width: 60.0,
-
-                                  //textfield------------------------------------------------------------------------------------------------------------
-                                  child: TextField(
-                                    controller: TextEditingController(
-                                        text: widget.beam.beam.toStringAsFixed(1)),
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'^\d*\.?\d{0,1}')),
-                                    ],
-                                    onChanged: (String text) {
-                                      // Do something with the updated text value
-                                      widget.beam.beam = double.tryParse(text) ?? 0;
-                                    },
-                                  )
-
-                                  //textfield------------------------------------------------------------------------------------------------------------
-
-                                  ),
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () => incrementvalueA(),
-                              ),
-                            ],
-                          ),
+                          Text(widget.beam.beam.toStringAsFixed(1),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
                   ],
                 ),
-                // SizedBox(height: 20),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.1,
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-//W
-class InputX extends StatefulWidget {
-  final String Prefix;
-  final List<modelX> Data;
-
-  //construter
-  InputX({required this.Prefix, required this.Data});
-
-  @override
-  InputXState createState() => InputXState();
-}
-
-class InputXState extends State<InputX> {
-  Map<String, dynamic> Properties = {};
-
-  bool get canAddInput => widget.Data.length < Properties['max'];
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.Prefix == 'W') {
-      Properties = {
-        'max': 3,
-        'labelA': 'แรงกระจาย',
-        'labelB': 'ความยาวของแรง',
-        'button': 'เพิ่ม W',
-        'defA': 200.0,
-        'defB': 1.0,
-      };
-    } else if (widget.Prefix == 'P') {
-      Properties = {
-        'max': 8,
-        'labelA': 'แรงแนวดิ่ง',
-        'labelB': 'ระยะจากจุดรองรับ',
-        'button': 'เพิ่ม P',
-        'defA': 200.0,
-        'defB': 1.0,
-      };
-    }
-
-    //   initial for first item
-    widget.Data.add(modelX(
-        id: widget.Prefix + '1', a: Properties['defA'], b: Properties['defB']));
-  }
-
-  void incrementvalueA(int i) {
-    setState(() {
-      (widget.Data[i].a += 10).clamp(0.0, 1000);
-    });
-  }
-
-  void decrementvalueA(int i) {
-    setState(() {
-      (widget.Data[i].a -= 10).clamp(0.0, 1000);
-    });
-  }
-
-  void incrementvalueB(int i) {
-    setState(() {
-      (widget.Data[i].b += 0.1).clamp(0.0, 99);
-    });
-  }
-
-  void decrementvalueB(int i) {
-    setState(() {
-      (widget.Data[i].b -= 0.1).clamp(0.0, 99);
-    });
-  }
-
-  void addInput() {
-    if (canAddInput) {
-      setState(() {
-        String id = widget.Prefix + (widget.Data.length + 1).toString();
-        widget.Data.add(
-            modelX(id: id, a: Properties['defA'], b: Properties['defB']));
-      });
-    }
-  }
-
-  void removeInput(int index) {
-    if (widget.Data.length > 1) {
-      setState(() {
-        widget.Data.removeAt(index);
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
-      // color: Colors.blue, // Replace with your widget here
-      child: Center(
-        child: Column(
-          children: [
-            //w---------------------------------------------------
-            for (int i = 0; i < widget.Data.length; i++)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          //  W ---------------------------------------------------- 
+          for (var x in widget.beam.w)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  //------------------------------------------------------------------
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.Prefix + (i + 1).toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.remove_circle),
-                        onPressed: () => removeInput(i),
-                      ),
+                      Text(x.id.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold))
                     ],
-                  ),
-                  Row(
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(Properties['labelA']),
-                            SizedBox(height: 8),
-                            Text(Properties['labelB']),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: () => decrementvalueA(i),
-                                ),
-                                Container(
-                                    width: 60.0,
-
-                                    //textfield------------------------------------------------------------------------------------------------------------
-                                    child: TextField(
-                                      controller: TextEditingController(
-                                          text: widget.Data[i].a
-                                              .toStringAsFixed(1)),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'^\d*\.?\d{0,1}')),
-                                      ],
-                                      onChanged: (String text) {
-                                        // Do something with the updated text value
-                                        widget.Data[i].a =
-                                            double.tryParse(text) ?? 0;
-                                      },
-                                    )
-
-                                    //textfield------------------------------------------------------------------------------------------------------------
-
-                                    ),
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () => incrementvalueA(i),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: () => decrementvalueB(i),
-                                ),
-                                Container(
-                                    width: 60.0,
-                                    //textfield------------------------------------------------------------------------------------------------------------
-                                    child: TextField(
-                                      controller: TextEditingController(
-                                          text: widget.Data[i].b
-                                              .toStringAsFixed(1)),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'^\d*\.?\d{0,1}')),
-                                      ],
-                                      onChanged: (String text) {
-                                        // Do something with the updated text value
-                                        widget.Data[i].b =
-                                            double.tryParse(text) ?? 0;
-                                      },
-                                    )
-
-                                    //textfield------------------------------------------------------------------------------------------------------------
-                                    ),
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () => incrementvalueB(i),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      Text(widget.beam.labelW['labelA'].toString()),
                     ],
-                  ),
-                  // SizedBox(height: 20),
-                ],
-              ),
-            ElevatedButton(
-              onPressed: addInput,
-              child: Text(Properties['button']),
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.a.toStringAsFixed(1),style: TextStyle(fontWeight: FontWeight.bold) ),
+                    ],
+                  )),
+                ]),
+                Row(children: [
+                  //------------------------------------------------------------------
+                  const Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.beam.labelW['labelB'].toString()),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.b.toStringAsFixed(1)),
+                    ],
+                  )),
+                ]),
+                const Divider(
+                  //------------------------------------------------------------------
+                  color: Colors.black, // Customize the color of the line
+                  thickness: 0.1, // Customize the thickness of the line
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+
+          //  P ----------------------------------------------------- 
+          for (var x in widget.beam.p)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  //------------------------------------------------------------------
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(x.id.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold))
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.beam.labelP['labelA'].toString()),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.a.toStringAsFixed(1),style: TextStyle(fontWeight: FontWeight.bold)),
+                      
+                    ],
+                  )),
+                ]),
+                Row(children: [
+                  //------------------------------------------------------------------
+                  const Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.beam.labelP['labelB'].toString()),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.b.toStringAsFixed(1)),
+                    ],
+                  )),
+                ]),
+                const Divider(
+                  //------------------------------------------------------------------
+                  color: Colors.black, // Customize the color of the line
+                  thickness: 0.1, // Customize the thickness of the line
+                ),
+              ],
+            ),
+
+//#endregion 
+//--------------------------------------------------------------------------------------
+ 
+          Column(children: [
+            if (!_endOfInput)
+              Container(
+                  padding: EdgeInsets.all(16.0), // 80% of screen width
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.yellow, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(children: [
+                    Padding(
+                        padding:
+                            EdgeInsets.all(2.0), // Add padding around the Row
+                        child: Row(
+                            // b -------------------------------------------------------------------------------------------------
+                            children: [
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(_currentTitle,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))
+                                ],
+                              )),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(_labelA),
+                                ],
+                              )),
+                              Expanded(
+
+                                  //textfield    -------------------------------------------------------
+                                  child: TextFormField(
+                                      controller: _controllerA,
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      textAlign: TextAlign.right,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d*\.?\d{0,1}')),
+                                      ],
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        errorText: _errorText,
+                                      ),
+                                      style: TextStyle(fontSize: 15),
+                                      onChanged: (String text) {
+                                        final value =
+                                            double.tryParse(text) ?? 0;
+                                        if (!(value >= _minA &&
+                                            value <= _maxA)) {
+                                          setState(() {
+                                            _errorText = 'invalid value';
+                                          });
+                                        } else {
+                                          setState(() {
+                                            _errorText = null;
+                                          });
+                                        }
+                                      }
+
+                                      //widget.beam.w[i].b = double.tryParse(text) ?? 0;
+                                      ) //textfield -------------------------------------------------------
+                                  ),
+                              //  )
+                            ])),
+                    if (_currentTopic != 'B')
+                      Padding(
+                          padding:
+                              EdgeInsets.all(2.0), // Add padding around the Row
+                          child: Row(
+                              // a -------------------------------------------------------------------------------------------------
+
+                              children: [
+                                const Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(_labelB),
+                                  ],
+                                )),
+                                Expanded(
+
+                                    //textfield   -------------------------------------------------------
+                                    child: TextField(
+                                  controller: _controllerB,
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      decimal: true),
+                                  textAlign: TextAlign.right,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d*\.?\d{0,1}')),
+                                  ],
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 15),
+                                ) //textfield-------------------------------------------------------
+                                    ),
+                                // )
+                              ])),
+                    Row(
+                      //button next
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: goNext,
+                          child: Text('Next'),
+                        )
+                      ],
+                    )
+                  ]))
+          ])
+//--------------------------------------------------------------------------------------
+        ])));
+  }
+
+  void goNext() async {
+    double valueA = double.tryParse(_controllerA.text) ?? 0;
+    double valueB = double.tryParse(_controllerB.text) ?? 0;
+
+    //valueB = valueB.clamp(10, 1000);
+
+    //validate value-----------------------------------
+
+    if (_errorText != null) {
+      return;
+    }
+
+    //next input--------------------------------------
+
+    // start
+    if (_currentIndex == -1) {
+      _controllerA.text = _beamWidth.toStringAsFixed(1);
+      _currentIndex = 0;
+    } //  beam
+    else if (_currentIndex == 0) {
+      valueA = valueA.clamp(0.1, 12);
+      if (valueA == 0) {
+        _controllerA.text = _beamWidth.toStringAsFixed(1);
+        _currentIndex = 0;
+      } else {
+
+        _beamWidth = valueA;
+        widget.beam.beam = valueA;
+
+        //for next
+        _minA = 0.1;
+        _maxA = _beamWidth;
+        _currentIndex = 1; // goto first w
+        _controllerA.text = valueA.toStringAsFixed(1);
+        _controllerB.text = '0.0';
+      }
+    }
+    //w p
+    else {
+      if (valueA == 0) {
+        switch (_currentTopic) {
+          case 'W':
+            // goto first p
+            _currentIndex = 4;
+            _minA = 0;
+            _maxA = _beamWidth;
+            _controllerA.text = _maxA.toStringAsFixed(1);
+            _controllerB.text = '0.0';
+
+            break;
+          case 'P':
+            _endOfInput = true;
+            break;
+        }
+      } else {
+        switch (_currentTopic) {
+          case 'W':
+
+            //add to list
+            widget.beam.w.add(ModelX(id: _currentTitle, a: valueA, b: valueB));
+
+            //for next w
+            final double sumOfWidth =
+                widget.beam.w.fold(0, (sum, item) => sum + item.a);
+            _minA = 0;
+            _maxA = _beamWidth - sumOfWidth;
+            _currentIndex++;
+            _controllerA.text = _maxA.toStringAsFixed(1);
+            _controllerB.text = '0.0';
+
+            if (_maxA == 0) {
+              // goto first p
+              _currentIndex = 4;
+              _minA = 0;
+              _maxA = _beamWidth;
+              _controllerA.text = _maxA.toStringAsFixed(1);
+              _controllerB.text = '0.0';
+            }
+
+            break;
+
+          case 'P':
+
+            //add to list
+            widget.beam.p.add(ModelX(id: _currentTitle, a: valueA, b: valueB));
+
+            //for next w
+            final double sumOfWidth =
+                widget.beam.p.fold(0, (sum, item) => sum + item.a);
+            _minA = 0;
+            _maxA = _beamWidth - sumOfWidth;
+            _currentIndex++;
+            _controllerA.text = _maxA.toStringAsFixed(1);
+            _controllerB.text = '0.0';
+
+            if (_maxA == 0 || _currentIndex > Inputs.length - 1) {
+              _endOfInput = true;
+            }
+
+            break;
+        }
+      }
+    }
+
+    //label------------------------------------------------------------
+    _currentTitle = Inputs[_currentIndex];
+    _currentTopic = _currentTitle.substring(0, 1);
+
+    if (_currentTitle == 'B0') {
+      _currentTitle = 'ความยาวคาน';
+    }
+
+    switch (_currentTopic) {
+      case 'B':
+        _labelA = '';
+        _labelB = '';
+        break;
+      case 'W':
+        _labelA = widget.beam.labelW['labelA'].toString();
+        _labelB = widget.beam.labelW['labelB'].toString();
+        break;
+      case 'P':
+        _labelA = widget.beam.labelP['labelA'].toString();
+        _labelB = widget.beam.labelP['labelB'].toString();
+        break;
+    }
+
+    //update------------------------------------------------------------
+    setState(() {});
   }
 }

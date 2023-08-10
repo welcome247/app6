@@ -2,35 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'model.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(title: Text('Canvas')),
-//         body: MyCanvas(),
-//       ),
-//     );
-//   }
-// }
-
-// class draw extends StatefulWidget {
-//   @override
-//   drawState createState() => drawState();
-// }
-
-class drawA extends StatelessWidget { 
-
-  final modelB Beam;
-  final List<modelX> W;
-  final List<modelX> P;
  
+
+class DrawA extends StatelessWidget { 
+
+  final ModelBeam _beam;
+  
  //constructer
- drawA( this.Beam,this.W,this.P ){}
+ DrawA( this._beam  ){}
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +30,7 @@ class drawA extends StatelessWidget {
               color: Colors.orange[50],
               child: CustomPaint(
                 size: Size(double.infinity, double.infinity),
-                painter: CanvasPainter(1, Beam, W, P ),
+                painter: CanvasPainter(1, _beam ),
               ),
             ),
           ),
@@ -62,56 +41,40 @@ class drawA extends StatelessWidget {
 }
 
 class CanvasPainter extends CustomPainter {
-  final double scale;
+  final double _scale;
 
-  final modelB Beam;
-  final List<modelX> W;
-  final List<modelX> P;
+ final ModelBeam _beam;
 
    //constructer
-  CanvasPainter(this.scale ,this.Beam,this.W,this.P);
-
-  //input form user ------------------------------------------------------------------
-
-  //double beam = 5;// beam ; // max width
+  CanvasPainter(this._scale ,this._beam );
  
-  // List W = [
-  //   {'id': 'W1', 'b': 1.8, 'a': 600},
-  //   {'id': 'W2', 'b': 2.5, 'a': 1100},
-  //   {'id': 'W3', 'b': 1.2, 'a': 400},
-  // ];
-
-  // List P = [
-  //   {'id': 'P1', 'b': 1.8, 'a': 200},
-  //   {'id': 'P2', 'b': 3.1, 'a': 500},
-  // ];
-
 // format
   final List Wf = [
-    {'strock': Colors.green, 'fill': Colors.green[50], 'high': 1},
-    {'strock': Colors.blue, 'fill': Colors.blue[50], 'high': 1.2},
-    {'strock': Colors.purple, 'fill': Colors.purple[50], 'high': 1.4},
+    {'strock': Colors.green, 'fill': Colors.green[50],  },
+    {'strock': Colors.blue, 'fill': Colors.blue[50],  },
+    {'strock': Colors.purple, 'fill': Colors.purple[50],  },
   ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.scale(scale, scale); // Apply the scaling factor
+    canvas.scale(_scale, _scale); // Apply the scaling factor
 
     double MXPX = size.width; // max width pixel on screen
-    double factW = MXPX / Beam.beam; //width factor
+    double factW = MXPX / _beam.beam; //width factor
     double factH = size.height / 8; //height factor
     double stroke = 2;
 
     var paintx = Paint();
     var paintf = Paint();
 
+final _high = 1.5;
     final BL = factH * 5; //baseline
     double x1 = 0;
     double Width = 0;
 
 // draw W -----------------------------------------------------------------------------
 
-    for (var i = 0; i <= W.length - 1; i++) {
+    for (var i = 0; i <= _beam.w.length - 1; i++) {
       //set brush
       paintx = new Paint()
         ..color = Wf[i]['strock']
@@ -122,9 +85,9 @@ class CanvasPainter extends CustomPainter {
         ..color = Wf[i]['fill']
         ..style = PaintingStyle.fill;
 
-     Width =W[i].b*factW; 
+     Width =_beam.w[i].a*factW; 
 
-      final high = ((Wf[i]['high'] * factH));
+      final high = ((_high * factH));
       final rect = Rect.fromLTWH(x1, BL - high, Width - stroke, high);
 
       //draw
@@ -134,7 +97,7 @@ class CanvasPainter extends CustomPainter {
       //text
       final textPainterA = TextPainter(
           text: TextSpan(
-            text: W[i].id.toString(),
+            text: _beam.w[i].id.toString(),
             style: TextStyle(
               color: Wf[i]['strock'],
               fontSize: 15,
@@ -146,7 +109,7 @@ class CanvasPainter extends CustomPainter {
 
       final textPainterB = TextPainter(
           text: TextSpan(
-            text: W[i].a.toString(),
+            text: _beam.w[i].b.toString(),
             style: TextStyle(
               color: Colors.grey,
               fontSize: 12,
@@ -173,8 +136,8 @@ class CanvasPainter extends CustomPainter {
     final Y2 = BL - (2.4 * factH);
     double X = 0;
 
-    for (var i = 0; i <= P.length - 1; i++) {
-      X += P[i].b * factW;
+    for (var i = 0; i <= _beam.p.length - 1; i++) {
+      X +=_beam.p[i].a * factW;
 
       canvas.drawLine(Offset(X, Y1), Offset(X, Y2), paintx);
 
@@ -188,7 +151,7 @@ class CanvasPainter extends CustomPainter {
 //text
       final textPainterA = TextPainter(
           text: TextSpan(
-            text: P[i].id.toString(),
+            text: _beam.p[i].id.toString(),
             style: TextStyle(
               color: Colors.pink,
               fontSize: 15,
@@ -200,7 +163,7 @@ class CanvasPainter extends CustomPainter {
 
       final textPainterB = TextPainter(
           text: TextSpan(
-            text: P[i].a.toStringAsFixed(0),
+            text: _beam.p[i].b.toStringAsFixed(0),
             style: TextStyle(
               color: Colors.grey,
               fontSize: 12,
@@ -247,8 +210,8 @@ class CanvasPainter extends CustomPainter {
     X = 0;
     canvas.drawLine(Offset(X, PY1), Offset(X, PY2), paintx);
 
-    for (var i in P) {
-      final width = i.b;
+    for (var i in _beam.p) {
+      final width = i.a;
       X += (width * factW);
 
       canvas.drawLine(Offset(X, PY1), Offset(X, PY2), paintx);
@@ -265,7 +228,7 @@ class CanvasPainter extends CustomPainter {
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.center);
       textPainterA.layout();
-      textPainterA.paint(canvas, Offset(X - ((i.b * factW) / 2), PY1 - 10));
+      textPainterA.paint(canvas, Offset(X - ((i.a * factW) / 2), PY1 - 10));
     }
 
 // W mark
@@ -276,8 +239,8 @@ class CanvasPainter extends CustomPainter {
     X = 0;
     canvas.drawLine(Offset(X, WY1), Offset(X, WY2), paintx);
 
-    for (var i in W) {
-      final width = i.b;
+    for (var i in _beam.w) {
+      final width = i.a;
       X += (width * factW);
 
       canvas.drawLine(Offset(X, WY1), Offset(X, WY2), paintx);
@@ -294,7 +257,7 @@ class CanvasPainter extends CustomPainter {
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.center);
       textPainterA.layout();
-      textPainterA.paint(canvas, Offset(X - ((i.b * factW) / 2), WY1 - 10));
+      textPainterA.paint(canvas, Offset(X - ((i.a * factW) / 2), WY1 - 10));
     }
 
     // max mark
@@ -304,7 +267,7 @@ class CanvasPainter extends CustomPainter {
 
     final textPainterA = TextPainter(
         text: TextSpan(
-          text: Beam.beam.toStringAsFixed(1) ,
+          text: _beam.beam.toStringAsFixed(1) ,
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,

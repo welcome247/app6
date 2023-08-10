@@ -1,7 +1,4 @@
- 
-
 import 'package:flutter/material.dart';
-  
 import 'draw.dart';
 import 'input.dart';
 import 'model.dart';
@@ -25,42 +22,52 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  //*all input  from user collect here
+  ModelBeam beam = ModelBeam();
 
- //*all input data from user start here
-  modelB beam = modelB() ;
-  List<modelX> inpW = [];
-  List<modelX> inpP = [];
-
-void initState() {
-    super.initState();
-
-     beam.beam = 5;  // default beam long
-  }
-
+  final GlobalKey<UserInputState> _myWidgetKey = GlobalKey();
  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Input')),
+        appBar: AppBar(title: Text('Beam Input')),
         body: SingleChildScrollView(
           child: Center(
             child: Column(children: [
-              InputB(beam:beam),
-              Row(children: <Widget>[Expanded(child: Divider())]),
-
-              InputX(Prefix: 'W', Data: inpW   ),
-              Row(children: <Widget>[Expanded(child: Divider())]),
-
-              InputX(Prefix: 'P', Data: inpP),
-              Row(children: <Widget>[Expanded(child: Divider())]),
-
-              ElevatedButton(
-                onPressed: () {
-                  submitData(context);
-                },
-                child: Text('submit'),
-              ),
+              // Display(beam: beam ),
+              UserInput(beam: beam, key: _myWidgetKey),
+            
+              // button ------------------------------------------------------
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              beam.clear();
+                              _myWidgetKey.currentState?.reset();
+                            });
+                          },
+                          child: Text('Reset'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blueGrey,
+                          ))),
+                  SizedBox(width: 20),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          submitData(context);
+                        },
+                        child: Text('Submit'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                        )),
+                  ),
+                ],
+              )
             ]),
           ),
         ));
@@ -70,10 +77,8 @@ void initState() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => drawA(beam, inpW, inpP), //
+        builder: (context) => DrawA(beam), //
       ),
     );
   }
 }
- 
- 

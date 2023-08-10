@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
- 
-class modelX {
+class ModelX {
   String id = '';
   double a = 0;
   double b = 0;
 
-  modelX({
+  ModelX({
     String id = '',
     double a = 0,
     double b = 0,
@@ -15,25 +13,47 @@ class modelX {
     this.b = b;
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'a': a,
-      'b': b,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'a': a,
+  //     'b': b,
+  //   };
+  // }
 }
 
+class ModelBeam {
+  double beam = 0; //ความยาวคาน
+  List<ModelX> w = [];
+  List<ModelX> p = [];
 
-class modelB{     
+  final Map<String, String> labelW = {
+    'title': 'W',
+    'labelA': 'ความยาวของแรง',
+    'labelB': 'แรงกระจาย'
+  };
+  final Map<String, String> labelP = {
+    'title': 'P',
+    'labelA': 'ระยะจากจุดรองรับ',
+    'labelB': 'แรงแนวดิ่ง',
+  };
 
-  double beam = 0;   // beam long
-
-//constructer
-    inputB({ 
-    double beam = 0,
-  }) {
-    this.beam = beam;
-     
+  void clear() {
+    beam = 0;
+    w.clear();
+    p.clear();
   }
+
+  // List<Map<String, String>> all = [
+  //   {
+  //     'title': 'W',
+  //     'labelA': 'ความยาวของแรง',
+  //     'labelB': 'แรงกระจาย',
+  //   },
+  //   {
+  //     'title': 'P',
+  //     'labelA': 'ระยะจากจุดรองรับ',
+  //     'labelB': 'แรงแนวดิ่ง',
+  //   }
+  // ];
 }
