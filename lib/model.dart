@@ -43,17 +43,5 @@ class ModelBeam {
     w.clear();
     p.clear();
   }
-
-  // List<Map<String, String>> all = [
-  //   {
-  //     'title': 'W',
-  //     'labelA': 'ความยาวของแรง',
-  //     'labelB': 'แรงกระจาย',
-  //   },
-  //   {
-  //     'title': 'P',
-  //     'labelA': 'ระยะจากจุดรองรับ',
-  //     'labelB': 'แรงแนวดิ่ง',
-  //   }
-  // ];
+ 
 }

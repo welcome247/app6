@@ -54,7 +54,7 @@ class CanvasPainter extends CustomPainter {
     {'strock': Colors.blue, 'fill': Colors.blue[50],  },
     {'strock': Colors.purple, 'fill': Colors.purple[50],  },
   ];
-
+ 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(_scale, _scale); // Apply the scaling factor

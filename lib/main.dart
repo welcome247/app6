@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
-
+ 
 class HomePageState extends State<HomePage> {
   //*all input  from user collect here
   ModelBeam beam = ModelBeam();
