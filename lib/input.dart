@@ -262,10 +262,14 @@ class UserInputState extends State<UserInput> {
                           padding:
                               EdgeInsets.all(2.0), // Add padding around the Row
                           child: Row(children: [
-                            const Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                            )),
+                                                      Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_currentTitle,
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          )),
                             Expanded(
                                 child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,10 +303,13 @@ class UserInputState extends State<UserInput> {
                         padding:
                             EdgeInsets.all(2.0), // Add padding around the Row
                         child: Row(children: [
+                         
                           Expanded(
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+
+                               if (_currentTopic  == 'B')
                               Text(_currentTitle,
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
