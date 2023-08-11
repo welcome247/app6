@@ -12,7 +12,7 @@ class UserInput extends StatefulWidget {
   @override
   UserInputState createState() => UserInputState();
 }
-
+//dddddd
 List<String> Inputs = [
   'B0',
   'W1',
@@ -25,7 +25,7 @@ List<String> Inputs = [
   'P5',
   'P6',
   'P7',
-  'P8ss'
+  'P8'
 ];
 
 class UserInputState extends State<UserInput> {
