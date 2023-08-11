@@ -25,7 +25,7 @@ List<String> Inputs = [
   'P5',
   'P6',
   'P7',
-  'P8'
+  'P8ss'
 ];
 
 class UserInputState extends State<UserInput> {
