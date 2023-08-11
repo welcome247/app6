@@ -132,8 +132,8 @@ final _high = 1.5;
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    final Y1 = BL - (1.7 * factH);
-    final Y2 = BL - (2.4 * factH);
+    final Y1 = BL - (1.6 * factH);
+    final Y2 = BL - (2.5 * factH);
     double X = 0;
 
     for (var i = 0; i <= _beam.p.length - 1; i++) {
@@ -141,6 +141,7 @@ final _high = 1.5;
 
       canvas.drawLine(Offset(X, Y1), Offset(X, Y2), paintx);
 
+      //arrow head
       var path = Path();
       path.moveTo(X, Y1 + 6);
       path.lineTo(X - 5, Y1);

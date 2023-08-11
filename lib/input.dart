@@ -3,23 +3,22 @@ import 'package:flutter/services.dart';
 import 'model.dart';
 
 class UserInput extends StatefulWidget {
-
-   final ModelBeam beam; 
+  final ModelBeam beam;
 
 //construter
   UserInput({required this.beam, Key? key}) : super(key: key);
- 
+
   @override
   UserInputState createState() => UserInputState();
 }
-//ddddddxx
+
 List<String> Inputs = [
   'B0',
   'W1',
   'W2',
   'W3',
   'P1',
-  'P2', 
+  'P2',
   'P3',
   'P4',
   'P5',
@@ -40,12 +39,12 @@ class UserInputState extends State<UserInput> {
   String _currentTitle = 'ความยาวคาน';
   String _currentTopic = 'B';
   bool _endOfInput = false;
-  double _beamWidth=0;    
+  double _beamWidth = 0;
   String? _errorText = null;
-  double _minA = 0.1;//expect value for box a
-  double _maxA = 12;//expect value for box a
+  double _minA = 0.1; //expect value for box a
+  double _maxA = 12; //expect value for box a
 
-@override
+  @override
   void initState() {
     reset();
   }
@@ -77,8 +76,8 @@ class UserInputState extends State<UserInput> {
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Center(
-            child: Column(children: [ 
-//--------------------------------------------------------------------------------------    
+            child: Column(children: [
+//--------------------------------------------------------------------------------------
 //#region  Display
 
           //beam---------------------------------------------------
@@ -125,7 +124,7 @@ class UserInputState extends State<UserInput> {
               ],
             ),
 
-          //  W ---------------------------------------------------- 
+          //  W ----------------------------------------------------
           for (var x in widget.beam.w)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +150,8 @@ class UserInputState extends State<UserInput> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(x.a.toStringAsFixed(1),style: TextStyle(fontWeight: FontWeight.bold) ),
+                      Text(x.a.toStringAsFixed(1),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   )),
                 ]),
@@ -184,7 +184,7 @@ class UserInputState extends State<UserInput> {
               ],
             ),
 
-          //  P ----------------------------------------------------- 
+          //  P -----------------------------------------------------
           for (var x in widget.beam.p)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,8 +210,8 @@ class UserInputState extends State<UserInput> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(x.a.toStringAsFixed(1),style: TextStyle(fontWeight: FontWeight.bold)),
-                      
+                      Text(x.a.toStringAsFixed(1),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   )),
                 ]),
@@ -244,9 +244,9 @@ class UserInputState extends State<UserInput> {
               ],
             ),
 
-//#endregion 
+//#endregion
 //--------------------------------------------------------------------------------------
- 
+
           Column(children: [
             if (!_endOfInput)
               Container(
@@ -256,90 +256,69 @@ class UserInputState extends State<UserInput> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(children: [
-                    Padding(
-                        padding:
-                            EdgeInsets.all(2.0), // Add padding around the Row
-                        child: Row(
-                            // b -------------------------------------------------------------------------------------------------
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_currentTitle,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold))
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_labelA),
-                                ],
-                              )),
-                              Expanded(
-
-                                  //textfield    -------------------------------------------------------
-                                  child: TextFormField(
-                                      controller: _controllerA,
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      textAlign: TextAlign.right,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'^\d*\.?\d{0,1}')),
-                                      ],
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        errorText: _errorText,
-                                      ),
-                                      style: TextStyle(fontSize: 15),
-                                      onChanged: (String text) {
-                                        final value =
-                                            double.tryParse(text) ?? 0;
-                                        if (!(value >= _minA &&
-                                            value <= _maxA)) {
-                                          setState(() {
-                                            _errorText = 'invalid value';
-                                          });
-                                        } else {
-                                          setState(() {
-                                            _errorText = null;
-                                          });
-                                        }
-                                      }
-
-                                      //widget.beam.w[i].b = double.tryParse(text) ?? 0;
-                                      ) //textfield -------------------------------------------------------
-                                  ),
-                              //  )
-                            ])),
+                     // a -------------------------------------------------------------------------------------------------
                     if (_currentTopic != 'B')
                       Padding(
                           padding:
                               EdgeInsets.all(2.0), // Add padding around the Row
-                          child: Row(
-                              // a -------------------------------------------------------------------------------------------------
-
+                          child: Row(children: [
+                            const Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                            )),
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                )),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(_labelB),
-                                  ],
-                                )),
-                                Expanded(
+                                Text(_labelB),
+                              ],
+                            )),
+                            Expanded(
 
-                                    //textfield   -------------------------------------------------------
-                                    child: TextField(
-                                  controller: _controllerB,
+                                //textfield   -------------------------------------------------------
+                                child: TextField(
+                              controller: _controllerB,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              textAlign: TextAlign.right,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d*\.?\d{0,1}')),
+                              ],
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: TextStyle(fontSize: 15),
+                            ) //textfield-------------------------------------------------------
+                                ),
+                            // )
+                          ])),
+
+                    // b -------------------------------------------------------------------------------------------------
+                    Padding(
+                        padding:
+                            EdgeInsets.all(2.0), // Add padding around the Row
+                        child: Row(children: [
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_currentTitle,
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          )),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_labelA),
+                            ],
+                          )),
+                          Expanded(
+
+                              //textfield    -------------------------------------------------------
+                              child: TextFormField(
+                                  controller: _controllerA,
                                   keyboardType: TextInputType.numberWithOptions(
                                       decimal: true),
                                   textAlign: TextAlign.right,
@@ -349,12 +328,26 @@ class UserInputState extends State<UserInput> {
                                   ],
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
+                                    errorText: _errorText,
                                   ),
                                   style: TextStyle(fontSize: 15),
-                                ) //textfield-------------------------------------------------------
-                                    ),
-                                // )
-                              ])),
+                                  onChanged: (String text) {
+                                    final value = double.tryParse(text) ?? 0;
+                                    if (!(value >= _minA && value <= _maxA)) {
+                                      setState(() {
+                                        _errorText = 'invalid value';
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _errorText = null;
+                                      });
+                                    }
+                                  }) //textfield -------------------------------------------------------
+                              ),
+                          //  )
+                        ])),
+                  
+                   
                     Row(
                       //button next
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -396,7 +389,6 @@ class UserInputState extends State<UserInput> {
         _controllerA.text = _beamWidth.toStringAsFixed(1);
         _currentIndex = 0;
       } else {
-
         _beamWidth = valueA;
         widget.beam.beam = valueA;
 
