@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'model.dart';
 
 class UserInput extends StatefulWidget {
-  final ModelBeam beam;
+  final ModelBeam  beam;
 
 //construter
   UserInput({required this.beam, Key? key}) : super(key: key);
@@ -35,9 +35,9 @@ class UserInputState extends State<UserInput> {
 
   String _labelA = '';
   String _labelB = '';
+  String _labelTitle = '';
   int _currentIndex = -1;
-  String _currentTitle = 'ความยาวคาน';
-  String _currentTopic = 'B';
+  String _currentGroup = 'B';
   bool _endOfInput = false;
   double _beamWidth = 0;
   String? _errorText = null;
@@ -53,9 +53,9 @@ class UserInputState extends State<UserInput> {
     setState(() {
       _labelA = '';
       _labelB = '';
+      _labelTitle = 'ความยาวคาน';
       _currentIndex = 0;
-      _currentTitle = 'ความยาวคาน';
-      _currentTopic = 'B';
+      _currentGroup = 'B';
       _endOfInput = false;
       _beamWidth = 5; // default
       _errorText = null;
@@ -129,7 +129,29 @@ class UserInputState extends State<UserInput> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+               
                 Row(children: [
+                  //------------------------------------------------------------------
+                  const Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.beam.labelW['labelB'].toString()),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.b.toStringAsFixed(1)),
+                    ],
+                  )),
+                ]),
+                 Row(children: [
                   //------------------------------------------------------------------
                   Expanded(
                       child: Column(
@@ -155,28 +177,8 @@ class UserInputState extends State<UserInput> {
                     ],
                   )),
                 ]),
-                Row(children: [
-                  //------------------------------------------------------------------
-                  const Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  )),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.beam.labelW['labelB'].toString()),
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(x.b.toStringAsFixed(1)),
-                    ],
-                  )),
-                ]),
                 const Divider(
+                  
                   //------------------------------------------------------------------
                   color: Colors.black, // Customize the color of the line
                   thickness: 0.1, // Customize the thickness of the line
@@ -189,7 +191,29 @@ class UserInputState extends State<UserInput> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Row(children: [
+                  //------------------------------------------------------------------
+                  const Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.beam.labelP['labelB'].toString()),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(x.b.toStringAsFixed(1)),
+                    ],
+                  )),
+                ]),
+                                Row(children: [
                   //------------------------------------------------------------------
                   Expanded(
                       child: Column(
@@ -215,27 +239,6 @@ class UserInputState extends State<UserInput> {
                     ],
                   )),
                 ]),
-                Row(children: [
-                  //------------------------------------------------------------------
-                  const Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  )),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.beam.labelP['labelB'].toString()),
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(x.b.toStringAsFixed(1)),
-                    ],
-                  )),
-                ]),
                 const Divider(
                   //------------------------------------------------------------------
                   color: Colors.black, // Customize the color of the line
@@ -257,7 +260,7 @@ class UserInputState extends State<UserInput> {
                   ),
                   child: Column(children: [
                      // a -------------------------------------------------------------------------------------------------
-                    if (_currentTopic != 'B')
+                    if (_currentGroup != 'B')
                       Padding(
                           padding:
                               EdgeInsets.all(2.0), // Add padding around the Row
@@ -266,7 +269,7 @@ class UserInputState extends State<UserInput> {
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(_currentTitle,
+                              Text(_labelTitle,
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           )),
@@ -309,8 +312,8 @@ class UserInputState extends State<UserInput> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
 
-                               if (_currentTopic  == 'B')
-                              Text(_currentTitle,
+                               if (_currentGroup  == 'B')
+                              Text(_labelTitle,
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           )),
@@ -410,7 +413,7 @@ class UserInputState extends State<UserInput> {
     //w p
     else {
       if (valueA == 0) {
-        switch (_currentTopic) {
+        switch (_currentGroup) {
           case 'W':
             // goto first p
             _currentIndex = 4;
@@ -425,11 +428,11 @@ class UserInputState extends State<UserInput> {
             break;
         }
       } else {
-        switch (_currentTopic) {
+        switch (_currentGroup) {
           case 'W':
 
             //add to list
-            widget.beam.w.add(ModelX(id: _currentTitle, a: valueA, b: valueB));
+            widget.beam.w.add(ModelX(id: _labelTitle, a: valueA, b: valueB));
 
             //for next w
             final double sumOfWidth =
@@ -454,7 +457,7 @@ class UserInputState extends State<UserInput> {
           case 'P':
 
             //add to list
-            widget.beam.p.add(ModelX(id: _currentTitle, a: valueA, b: valueB));
+            widget.beam.p.add(ModelX(id: _labelTitle, a: valueA, b: valueB));
 
             //for next w
             final double sumOfWidth =
@@ -475,14 +478,14 @@ class UserInputState extends State<UserInput> {
     }
 
     //label------------------------------------------------------------
-    _currentTitle = Inputs[_currentIndex];
-    _currentTopic = _currentTitle.substring(0, 1);
+    _labelTitle = Inputs[_currentIndex];
+    _currentGroup = _labelTitle.substring(0, 1);
 
-    if (_currentTitle == 'B0') {
-      _currentTitle = 'ความยาวคาน';
+    if (_labelTitle == 'B0') {
+      _labelTitle = 'ความยาวคาน';
     }
 
-    switch (_currentTopic) {
+    switch (_currentGroup) {
       case 'B':
         _labelA = '';
         _labelB = '';
