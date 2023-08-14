@@ -1,4 +1,4 @@
-//version 1.0.2
+//version 1.0.3
 
 import 'package:flutter/material.dart';
 import 'draw.dart';
@@ -22,13 +22,13 @@ class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
- 
+
 class HomePageState extends State<HomePage> {
   //*all input  from user collect here
   ModelBeam beam = ModelBeam();
 
-  final GlobalKey<UserInputState> _myWidgetKey = GlobalKey();
- 
+  //final GlobalKey<UserInputState> _myWidgetKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,43 +37,16 @@ class HomePageState extends State<HomePage> {
           child: Center(
             child: Column(children: [
               // Display(beam: beam ),
-              UserInput(beam: beam, key: _myWidgetKey),
-            
-              // button ------------------------------------------------------
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              beam.clear();
-                              _myWidgetKey.currentState?.reset();
-                            });
-                          },
-                          child: Text('Reset'),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blueGrey,
-                          ))),
-                  SizedBox(width: 20),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          submitData(context);
-                        },
-                        child: Text('Submit'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                        )),
-                  ),
-                ],
-              )
+              UserInput(
+                beam: beam,
+                onSubmit:  ()=> submitData(context),
+              ),
             ]),
           ),
         ));
-  }
+  } 
+
+ 
 
   void submitData(BuildContext context) {
     Navigator.push(

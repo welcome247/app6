@@ -3,14 +3,18 @@ import 'package:flutter/services.dart';
 import 'model.dart';
 
 class UserInput extends StatefulWidget {
-  final ModelBeam  beam;
+
+  final VoidCallback onSubmit; //create events
+  final ModelBeam beam;
 
 //construter
-  UserInput({required this.beam, Key? key}) : super(key: key);
+
+  UserInput({required this.beam , required  this.onSubmit})  ;
+    //UserInput({required this.beam, Key? key}) : super(key: key);
 
   @override
   UserInputState createState() => UserInputState();
-}
+} 
 
 List<String> Inputs = [
   'B0',
@@ -28,6 +32,7 @@ List<String> Inputs = [
 ];
 
 class UserInputState extends State<UserInput> {
+ 
   TextEditingController _controllerA =
       TextEditingController(text: '0.0'); //b value textbox
   TextEditingController _controllerB =
@@ -129,7 +134,6 @@ class UserInputState extends State<UserInput> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               
                 Row(children: [
                   //------------------------------------------------------------------
                   const Expanded(
@@ -151,7 +155,7 @@ class UserInputState extends State<UserInput> {
                     ],
                   )),
                 ]),
-                 Row(children: [
+                Row(children: [
                   //------------------------------------------------------------------
                   Expanded(
                       child: Column(
@@ -178,7 +182,6 @@ class UserInputState extends State<UserInput> {
                   )),
                 ]),
                 const Divider(
-                  
                   //------------------------------------------------------------------
                   color: Colors.black, // Customize the color of the line
                   thickness: 0.1, // Customize the thickness of the line
@@ -191,7 +194,6 @@ class UserInputState extends State<UserInput> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Row(children: [
                   //------------------------------------------------------------------
                   const Expanded(
@@ -213,7 +215,7 @@ class UserInputState extends State<UserInput> {
                     ],
                   )),
                 ]),
-                                Row(children: [
+                Row(children: [
                   //------------------------------------------------------------------
                   Expanded(
                       child: Column(
@@ -251,68 +253,26 @@ class UserInputState extends State<UserInput> {
 //--------------------------------------------------------------------------------------
 
           Column(children: [
-            if (!_endOfInput)
-              Container(
-                  padding: EdgeInsets.all(16.0), // 80% of screen width
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.yellow, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(children: [
-                     // a -------------------------------------------------------------------------------------------------
-                    if (_currentGroup != 'B')
-                      Padding(
-                          padding:
-                              EdgeInsets.all(2.0), // Add padding around the Row
-                          child: Row(children: [
-                                                      Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(_labelTitle,
-                                  style: TextStyle(fontWeight: FontWeight.bold))
-                            ],
-                          )),
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(_labelB),
-                              ],
-                            )),
-                            Expanded(
-
-                                //textfield   -------------------------------------------------------
-                                child: TextField(
-                              controller: _controllerB,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              textAlign: TextAlign.right,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d*\.?\d{0,1}')),
-                              ],
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                              ),
-                              style: TextStyle(fontSize: 15),
-                            ) //textfield-------------------------------------------------------
-                                ),
-                            // )
-                          ])),
-
-                    // b -------------------------------------------------------------------------------------------------
+            
+            Container(),
+            if (!_endOfInput) 
+            Container(
+                padding: EdgeInsets.all(16.0), // 80% of screen width
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.yellow, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(children: [
+                  // a -------------------------------------------------------------------------------------------------
+                  if (_currentGroup != 'B')
                     Padding(
                         padding:
                             EdgeInsets.all(2.0), // Add padding around the Row
                         child: Row(children: [
-                         
                           Expanded(
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
-                               if (_currentGroup  == 'B')
                               Text(_labelTitle,
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
@@ -321,55 +281,133 @@ class UserInputState extends State<UserInput> {
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(_labelA),
+                              Text(_labelB),
                             ],
                           )),
                           Expanded(
 
-                              //textfield    -------------------------------------------------------
-                              child: TextFormField(
-                                  controller: _controllerA,
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      decimal: true),
-                                  textAlign: TextAlign.right,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d*\.?\d{0,1}')),
-                                  ],
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    errorText: _errorText,
-                                  ),
-                                  style: TextStyle(fontSize: 15),
-                                  onChanged: (String text) {
-                                    final value = double.tryParse(text) ?? 0;
-                                    if (!(value >= _minA && value <= _maxA)) {
-                                      setState(() {
-                                        _errorText = 'invalid value';
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _errorText = null;
-                                      });
-                                    }
-                                  }) //textfield -------------------------------------------------------
+                              //textfield   -------------------------------------------------------
+                              child: TextField(
+                            controller: _controllerB,
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            textAlign: TextAlign.right,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\.?\d{0,1}')),
+                            ],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            style: TextStyle(fontSize: 15),
+                          ) //textfield-------------------------------------------------------
                               ),
-                          //  )
+                          // )
                         ])),
-                  
-                   
-                    Row(
-                      //button next
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: goNext,
-                          child: Text('Next'),
-                        )
-                      ],
-                    )
-                  ]))
+
+                  // b -------------------------------------------------------------------------------------------------
+                  Padding(
+                      padding:
+                          EdgeInsets.all(2.0), // Add padding around the Row
+                      child: Row(children: [
+                        Expanded(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (_currentGroup == 'B')
+                              Text(_labelTitle,
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                          ],
+                        )),
+                        Expanded(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_labelA),
+                          ],
+                        )),
+                        Expanded(
+
+                            //textfield    -------------------------------------------------------
+                            child: TextFormField(
+                                controller: _controllerA,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                textAlign: TextAlign.right,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^\d*\.?\d{0,1}')),
+                                ],
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  errorText: _errorText,
+                                ),
+                                style: TextStyle(fontSize: 15),
+                                onChanged: (String text) {
+                                  //text hange
+                                  final value = double.tryParse(text) ?? 0;
+                                  if (!(value >= _minA && value <= _maxA)) {
+                                    setState(() {
+                                      _errorText = 'invalid value';
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _errorText = null;
+                                    });
+                                  }
+                                })
+                                 //textfield -------------------------------------------------------
+                            ),
+                        //  )
+                      ])),
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ElevatedButton(  //  next button 
+                        onPressed: goNext,
+                        child: Text('Next'),
+                      )
+                    ],
+                  )
+                ])),
+            //   ------------------------------------------------------
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    //reset button
+                    child: ElevatedButton(
+                        
+                        onPressed: () {
+                          setState(() {
+                            widget.beam.clear();
+                            reset();
+                          });
+                        },
+                        child: Text('Reset'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blueGrey,
+                        ))),
+                SizedBox(width: 20),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  //submit button 
+                  child: ElevatedButton(
+                      
+                      child: Text('Submit'),
+                       onPressed:(){
+                        goNext( ) ;//update currrent input before submit
+                        widget.onSubmit()  ; }, //callback event to outside
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                      )),
+                ),
+              ],
+            )
           ])
+
 //--------------------------------------------------------------------------------------
         ])));
   }
@@ -377,9 +415,7 @@ class UserInputState extends State<UserInput> {
   void goNext() async {
     double valueA = double.tryParse(_controllerA.text) ?? 0;
     double valueB = double.tryParse(_controllerB.text) ?? 0;
-
-    //valueB = valueB.clamp(10, 1000);
-
+ 
     //validate value-----------------------------------
 
     if (_errorText != null) {
@@ -500,7 +536,9 @@ class UserInputState extends State<UserInput> {
         break;
     }
 
-    //update------------------------------------------------------------
+    //update 
     setState(() {});
   }
+
+  
 }
