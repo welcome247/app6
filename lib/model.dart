@@ -2,7 +2,7 @@ class ModelX {
   String id = '';
   double a = 0;
   double b = 0;
-
+ 
   ModelX({
     String id = '',
     double a = 0,
@@ -10,7 +10,7 @@ class ModelX {
   }) {
     this.id = id;
     this.a = a;
-    this.b = b;
+    this.b = b; 
   }
 
   // Map<String, dynamic> toJson() {

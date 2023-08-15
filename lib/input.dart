@@ -29,9 +29,9 @@ List<String> Inputs = [
   'P6',
   'P7',
   'P8'
-];
+]; 
 
-class UserInputState extends State<UserInput> {
+class UserInputState extends State<UserInput>  {
  
   TextEditingController _controllerA =
       TextEditingController(text: '0.0'); //b value textbox
@@ -525,7 +525,7 @@ class UserInputState extends State<UserInput> {
       case 'B':
         _labelA = '';
         _labelB = '';
-        break;
+        break; 
       case 'W':
         _labelA = widget.beam.labelW['labelA'].toString();
         _labelB = widget.beam.labelW['labelB'].toString();

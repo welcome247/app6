@@ -10,7 +10,7 @@ class DrawA extends StatelessWidget {
   
  //constructer
  DrawA( this._beam  ){}
-
+ 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
